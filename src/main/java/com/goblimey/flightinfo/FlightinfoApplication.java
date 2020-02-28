@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.goblimey.flightinfo.domain.Flight;
 import com.goblimey.flightinfo.domain.Schedule;
 
 @SpringBootApplication
@@ -20,10 +21,12 @@ public class FlightinfoApplication {
 	private static final Logger log = LoggerFactory.getLogger(FlightinfoApplication.class);
 	
 	public static void main(String[] args) {
-		// Read the CSV file and create the flight schedule
-		// In a real application we would specify a full pathname
-		// and there could also be an HTTP request for submitting
-		// the file.
+		
+		// Read the CSV file and create the flight schedule.  The CSV must be
+		// in the current directory and named "flights.csv".  In a real
+		// application we would specify the full pathname of the CSV and there
+		// could also be an HTTP request for submitting it.
+
 		Path csv = Paths.get("flights.csv");
 		Schedule[] schedules = null;
 		
@@ -38,6 +41,18 @@ public class FlightinfoApplication {
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			return;
+		}
+		
+		// If there is an argument, get the date and then the flights for
+		// that date and print them.
+		
+		if (args.length >= 1) {
+			Flight[] flights = Schedule.getFlightsOnDate(schedules, args[0]);
+			
+			log.info("{} flights", flights.length);
+			for (Flight flight: flights) {
+				log.info("flight {}", flight);
+			}
 		}
 		
 		SpringApplication.run(FlightinfoApplication.class, args);
