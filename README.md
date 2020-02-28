@@ -15,7 +15,7 @@ builds the app and runs the unit tests.
 
      gradle run
      
-builds the app and runs it as a command line program..
+builds the app and runs it as a command line program.
 
 For a quick runtime test:
 
@@ -62,7 +62,7 @@ The result looks something like this:
 
 ```
 List of Flights
-10:00	Antigua	   ANU VS033
+10:00	Antigua	  ANU VS033
 10:15	Las Vegas LAS	VS043
 11:05	Barbados  BGI	VS029
 11:20	Orlando   MCO	VS027
@@ -89,7 +89,7 @@ uses simple for loops to scan the fields.
 On the other hand,
 Schedule.getFlightsOnDate
 has to scan and filter the schedules.
-and streams and lamdas seemed appropriate for that.
+Streams and lamdas seemed appropriate for that.
 
 I created two classes Schedule and Flight.
 An array of Schedule objects represent the data in the CSV
