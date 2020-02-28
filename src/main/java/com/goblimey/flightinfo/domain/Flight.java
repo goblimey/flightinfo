@@ -4,7 +4,7 @@ import java.time.LocalTime;
 
 /**
  * A Flight contains the data describing a flight - departure time, departure airport and so on.
- * @author simon
+ * @author Simon Ritchie
  *
  */
 public class Flight {

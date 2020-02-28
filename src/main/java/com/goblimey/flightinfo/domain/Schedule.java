@@ -7,21 +7,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.goblimey.flightinfo.FlightinfoApplication;
-
 /**
- * The Schedule holds the schedule for a flightNumber.
+ * The Schedule holds the schedule for a flight.
  * 
- * @author simon
+ * @author Simon Ritchie
  *
  */
 
@@ -30,7 +25,8 @@ public class Schedule {
 	private String destination;
 	private String destIATA;
 	private String flightNumber;
-	private boolean fliesOnDay[]; // One for every day of the week starting on Sunday.
+	// One entry for every day of the week starting on Sunday, true if flying that day.
+	private boolean fliesOnDay[]; 
 
 	private static final int minimumNumberOfFields = 5;
 
@@ -91,8 +87,9 @@ public class Schedule {
 	/**
 	 * Factory method to read a list of String field arrays and create an array of
 	 * schedules. It's assumed that the fields are created by reading a CSV file and
-	 * the first line is a header: Departure Time,Destination, ..... Any exceptions
-	 * from creating a schedule are ignored.
+	 * the first line is a header: "Departure Time,Destination, ....." and such lines
+	 * are ignored. Any exceptions from createScheduleFromFields are caught and
+	 * ignored, so that line of the CSV will be lost.
 	 * 
 	 * @param fieldList
 	 * @return the resulting schedules.
@@ -137,6 +134,11 @@ public class Schedule {
 		return flightNumber;
 	}
 
+	/**
+	 * Returns an array 0-7, true if flying that day.
+	 * Sunday is day 0, Monday is day 1, and so on.
+	 * @return the array showing which days are included in the schedule.
+	 */
 	public boolean[] getFliesOnDay() {
 		return fliesOnDay;
 	}
@@ -146,24 +148,27 @@ public class Schedule {
 	 * in the UTC timezone.
 	 * 
 	 * @param schedules a list of Schedule objects.
-	 * @param dateStr   "yyyy/mm/dd", UTC timezone assumed
+	 * @param dateStr   "yyyy-mm-dd", UTC timezone assumed
 	 * @return an array containing the Flight objects.
 	 */
 	public static Flight[] getFlightsOnDate(Schedule[] schedules, String dateStr) throws DateTimeParseException {
 		// Get the date, UTC assumed.
 		dateStr += " 00:00:00 UTC";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 		ZonedDateTime date = ZonedDateTime.parse(dateStr, formatter);
 		// Get the index from the day of the day - Sunday is index 0, Monday 1 and so
 		// on.
 		int dayOfWeek = date.getDayOfWeek().getValue();
 		// If the dayOfWeek is Sunday its value is 7. Index must be 0. Otherwise it's correct.
 		final int index = dayOfWeek == 7 ? 0 : dayOfWeek;
-		// Get the schedules
-		Schedule[] s = Stream.of(schedules).filter(schedule -> schedule.fliesOnDay[index]).toArray(Schedule[]::new);
-		Flight[] f = Stream.of(s).map(schedule -> new Flight(schedule.getDepartureTimeUTC(), schedule.getDestination(),
+		// Get the schedules which apply on the given date.
+		Schedule[] s = Stream.of(schedules).filter(schedule -> schedule.getFliesOnDay()[index]).toArray(Schedule[]::new);
+		
+		// Get the flights for those schedules.
+		Flight[] flights = Stream.of(s).map(schedule -> new Flight(schedule.getDepartureTimeUTC(), schedule.getDestination(),
 				schedule.getDestIATA(), schedule.getFlightNumber())).toArray(Flight[]::new);
-		return f;
+		
+		return flights;
 	}
 
 	@Override

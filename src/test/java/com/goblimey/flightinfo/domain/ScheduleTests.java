@@ -57,14 +57,14 @@ class ScheduleTests {
 		Schedule[] schedules = Schedule.createSchedulesFromFields(fieldList);
 		
 		// Test on Tuesday.
-		Flight[] flights = Schedule.getFlightsOnDate(schedules, "2020/02/25");
+		Flight[] flights = Schedule.getFlightsOnDate(schedules, "2020-02-25");
 		
 		assertEquals(2, flights.length);
 		assertEquals("UVF", flights[0].getDestIATA());
 		assertEquals("ANU", flights[1].getDestIATA());
 		
 		// Test flights on Saturday.
-		flights = Schedule.getFlightsOnDate(schedules, "2020/02/29");
+		flights = Schedule.getFlightsOnDate(schedules, "2020-02-29");
 		
 		assertEquals(1, flights.length);
 		assertEquals("ANU", flights[0].getDestIATA());
