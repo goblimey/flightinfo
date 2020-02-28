@@ -15,7 +15,7 @@ builds the app and runs the unit tests.
 
      gradle run
      
-builds the app and runs it as a web server.
+builds the app and runs it as a command line program..
 
 For a quick runtime test:
 
@@ -62,12 +62,12 @@ The result looks something like this:
 
 ```
 List of Flights
-10:00	Antigua	   ANU 	VS033
-10:15	Las Vegas	LAS	VS043
-11:05	Barbados	BGI	VS029
-11:20	Orlando 	MCO	VS027
-13:00	Orlando 	MCO	VS015
-15:35	Las Vegas	LAS	VS044
+10:00	Antigua	   ANU VS033
+10:15	Las Vegas LAS	VS043
+11:05	Barbados  BGI	VS029
+11:20	Orlando   MCO	VS027
+13:00	Orlando   MCO	VS015
+15:35	Las Vegas LAS	VS044
 ```
     
 
@@ -103,3 +103,12 @@ The last time I did any I used JSPs.
 I read that Spring Boot and JSPs don't work so well together,
 so this time I used Thymeleaf,
 which I've not used before.
+
+## Unit Testing
+
+I did some unit testing,
+but there are gaps.
+There could be a lot more testing of error cases,
+for example illegal data in the CSV,
+the user entering junk data,
+and so on.
