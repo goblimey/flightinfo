@@ -9,6 +9,8 @@ overwrite the file.
 In a real app,
 there would be an HTTP request to load a CSV.
 
+All dates and times are assumed to be in the UTC time zone.
+
     gradle test
     
 builds the app and runs the unit tests.
@@ -21,7 +23,7 @@ For a quick runtime test:
 
      gradle run --args 2020-02-29
 
-runs the app and supplies a date.
+runs the app and supplies a date (UTC assumed).
 The app lists the flights running on that day
 before starting the web server.
 The given date is a Saturday
@@ -73,6 +75,15 @@ List of Flights
 
 ## General Approach
 
+The solution assumes that all dates and times are in the UTC time zone.
+If the given date and the times in the CSV are in the local time zones,
+the problem becomes more complicated.
+
+The supplied date could be any old junk,
+which would cause an error during parsing.
+This should be handled much better
+and the code properly tested.
+
 I structure my source code so that as much of it as possible is available for simple unit tests.
 For example,
 the FlightsController constructor reads the CSV file and breaks it into fields,
@@ -112,3 +123,4 @@ There could be a lot more testing of error cases,
 for example illegal data in the CSV,
 the user entering junk data,
 and so on.
+There needs to be a lot more
