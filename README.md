@@ -119,8 +119,7 @@ which I've not used before.
 
 I did some unit testing,
 but there are gaps.
-There could be a lot more testing of error cases,
+There should be a lot more testing of error cases,
 for example illegal data in the CSV,
-the user entering junk data,
+the user entering a junk date,
 and so on.
-There needs to be a lot more
